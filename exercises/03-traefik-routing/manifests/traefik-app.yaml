@@ -1,0 +1,60 @@
+# ---------------------------------------------------------------
+# ArgoCD Application: traefik (Helm chart source)
+# ---------------------------------------------------------------
+# This Application uses a Helm chart as its source instead of a
+# Git directory. ArgoCD renders the chart with the provided
+# values and deploys the result into the cluster.
+#
+# This demonstrates that ArgoCD can manage both raw manifests
+# (exercises 01 & 02) and Helm charts from the same interface.
+# ---------------------------------------------------------------
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    # Helm chart repository URL (not a Git repo)
+    repoURL: https://traefik.github.io/charts
+    # Chart name within the repository
+    chart: traefik
+    # Pinned chart version for reproducibility
+    targetRevision: "39.0.7"
+    helm:
+      # Inline values (equivalent to a values.yaml file)
+      valuesObject:
+        service:
+          type: LoadBalancer
+        ingressRoute:
+          dashboard:
+            enabled: true
+            matchRule: Host(`traefik.localhost`)
+            entryPoints:
+              - web
+        providers:
+          kubernetesCRD:
+            enabled: true
+            allowCrossNamespace: true
+        ports:
+          web:
+            port: 8000
+            expose:
+              default: true
+            exposedPort: 80
+            protocol: TCP
+
+  destination:
+    server: https://kubernetes.default.svc
+    # Traefik gets its own namespace
+    namespace: traefik
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      # Create the traefik namespace if it doesn't exist
+      - CreateNamespace=true

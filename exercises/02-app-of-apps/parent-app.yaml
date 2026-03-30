@@ -1,0 +1,36 @@
+# ---------------------------------------------------------------
+# ArgoCD Application: workshop-apps (parent / App of Apps)
+# ---------------------------------------------------------------
+# This "parent" Application watches a directory that contains
+# other Application manifests (the "children"). ArgoCD deploys
+# those child Applications, which in turn deploy the actual
+# workloads. This pattern is called "App of Apps".
+#
+# Adding a new application = adding a YAML file to argocd-apps/
+# and committing to Git. Zero kubectl, 100% Git.
+# ---------------------------------------------------------------
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: workshop-apps
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/stafyniaksacha/talk-gitops-workshop.git
+    targetRevision: main
+    # This directory contains Application CRDs (the children)
+    path: exercises/02-app-of-apps/argocd-apps
+
+  destination:
+    # Children Applications must be created in the argocd namespace
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      # Re-sync if someone modifies a child Application manually
+      selfHeal: true
+      # Remove child Applications deleted from Git
+      prune: true

@@ -1,0 +1,20 @@
+# ---------------------------------------------------------------
+# Service: app-blue
+# ---------------------------------------------------------------
+# Exposes the app-blue Deployment within the cluster.
+# ArgoCD syncs this manifest alongside the Deployment.
+# ---------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-blue
+  namespace: workshop
+spec:
+  type: ClusterIP
+  selector:
+    app: app-blue
+  ports:
+    - port: 9898
+      targetPort: http
+      protocol: TCP
+      name: http

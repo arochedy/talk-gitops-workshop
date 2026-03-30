@@ -1,0 +1,26 @@
+# ---------------------------------------------------------------
+# IngressRoute: app-blue
+# ---------------------------------------------------------------
+# A Traefik IngressRoute is a Custom Resource (CRD) that defines
+# how incoming HTTP requests are routed to backend Services.
+#
+# This route matches requests with Host header "blue.localhost"
+# and forwards them to the app-blue Service on port 9898.
+# ---------------------------------------------------------------
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-blue
+  namespace: workshop
+spec:
+  # "web" is the default HTTP entrypoint (port 80)
+  entryPoints:
+    - web
+  routes:
+    # Match requests where the Host header equals "blue.localhost"
+    - match: Host(`blue.localhost`)
+      kind: Rule
+      services:
+        # Forward matching requests to the app-blue Service
+        - name: app-blue
+          port: 9898

@@ -1,0 +1,24 @@
+# ---------------------------------------------------------------
+# ArgoCD Application: app-nginx (child)
+# ---------------------------------------------------------------
+# This child Application is managed by the parent "workshop-apps".
+# It deploys a simple nginx instance from the demo-apps directory.
+# ---------------------------------------------------------------
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-nginx
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/stafyniaksacha/talk-gitops-workshop.git
+    targetRevision: main
+    path: exercises/02-app-of-apps/demo-apps/app-nginx
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: workshop
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------
+# Deployment: app-blue
+# ---------------------------------------------------------------
+# Deploys the podinfo application with a blue-themed UI.
+# This manifest is referenced by ArgoCD Applications in the
+# exercises (App of Apps pattern).
+# ---------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-blue
+  namespace: workshop
+  labels:
+    app.kubernetes.io/name: app-blue
+spec:
+  # Single replica for workshop purposes
+  replicas: 1
+
+  # The selector links this Deployment to its Pods via labels
+  selector:
+    matchLabels:
+      app: app-blue
+
+  # Pod template -- blueprint for every replica
+  template:
+    metadata:
+      labels:
+        app: app-blue
+        app.kubernetes.io/name: app-blue
+    spec:
+      containers:
+        - name: podinfo
+          # Same image used throughout the workshop series
+          image: ghcr.io/stefanprodan/podinfo:6.11.2
+          ports:
+            - containerPort: 9898
+              name: http
+          # Environment variables to customise the podinfo UI
+          env:
+            - name: PODINFO_UI_COLOR
+              # Dodger blue
+              value: "#1E90FF"
+            - name: PODINFO_UI_MESSAGE
+              value: "App Blue"
+          # ---- Health probes ----------------------------------------
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # ---- Resource management ----------------------------------
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi

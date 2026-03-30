@@ -1,0 +1,19 @@
+# ---------------------------------------------------------------
+# Service: app-green
+# ---------------------------------------------------------------
+# Provides a stable ClusterIP for the app-green Deployment.
+# ---------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-green
+  namespace: workshop
+spec:
+  type: ClusterIP
+  selector:
+    app: app-green
+  ports:
+    - port: 9898
+      targetPort: http
+      protocol: TCP
+      name: http

@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------
+# ArgoCD Helm values for workshop
+# ---------------------------------------------------------------
+# Minimal single-replica setup suitable for minikube.
+# Disables HA features and TLS to simplify local access.
+# ---------------------------------------------------------------
+
+global:
+  domain: argocd.localhost
+
+configs:
+  params:
+    # Allow plain HTTP access to the ArgoCD API server (no TLS for local dev)
+    server.insecure: true
+
+# Single-replica deployments (no HA needed for workshop)
+server:
+  replicas: 1
+
+controller:
+  replicas: 1
+
+repoServer:
+  replicas: 1
+
+# Disable components not needed for the workshop
+dex:
+  enabled: false
+
+notifications:
+  enabled: false
+
+applicationSet:
+  replicas: 1

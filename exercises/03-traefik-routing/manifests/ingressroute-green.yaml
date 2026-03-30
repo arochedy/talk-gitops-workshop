@@ -1,0 +1,25 @@
+# ---------------------------------------------------------------
+# IngressRoute: app-green
+# ---------------------------------------------------------------
+# Routes requests with Host "green.localhost" to the app-green
+# Service. This demonstrates host-based routing: two different
+# apps on two different subdomains, both served by Traefik.
+# ---------------------------------------------------------------
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-green
+  namespace: workshop
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`green.localhost`)
+      kind: Rule
+      # Middlewares can be added here to transform requests
+      # before they reach the backend (see middleware-ratelimit.yaml)
+      middlewares:
+        - name: rate-limit
+      services:
+        - name: app-green
+          port: 9898

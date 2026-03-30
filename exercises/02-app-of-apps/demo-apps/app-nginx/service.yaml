@@ -1,0 +1,19 @@
+# ---------------------------------------------------------------
+# Service: app-nginx
+# ---------------------------------------------------------------
+# Provides a stable ClusterIP for the app-nginx Deployment.
+# ---------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-nginx
+  namespace: workshop
+spec:
+  type: ClusterIP
+  selector:
+    app: app-nginx
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http

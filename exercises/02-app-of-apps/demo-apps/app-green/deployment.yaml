@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------
+# Deployment: app-green
+# ---------------------------------------------------------------
+# Deploys the podinfo application with a green-themed UI.
+# This manifest is referenced by ArgoCD Applications in the
+# exercises (App of Apps pattern).
+# ---------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-green
+  namespace: workshop
+  labels:
+    app.kubernetes.io/name: app-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-green
+  template:
+    metadata:
+      labels:
+        app: app-green
+        app.kubernetes.io/name: app-green
+    spec:
+      containers:
+        - name: podinfo
+          image: ghcr.io/stefanprodan/podinfo:6.11.2
+          ports:
+            - containerPort: 9898
+              name: http
+          env:
+            - name: PODINFO_UI_COLOR
+              # Sea green
+              value: "#2E8B57"
+            - name: PODINFO_UI_MESSAGE
+              value: "App Green"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
