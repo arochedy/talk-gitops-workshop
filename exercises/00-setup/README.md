@@ -46,6 +46,7 @@ kubectl create namespace workshop
 ```
 namespace/workshop created
 ```
+
 </details><br>
 
 Configurez-le comme namespace par défaut :
@@ -60,6 +61,7 @@ kubectl config set-context --current --namespace=workshop
 ```
 Context "minikube" modified.
 ```
+
 </details><br>
 
 ### 3. Installer ArgoCD
@@ -78,8 +80,8 @@ helm repo update
 "argo" has been added to your repositories
 ...Successfully got an update from the "argo" chart repository
 ```
-</details><br>
 
+</details><br>
 
 Installez ArgoCD avec le fichier de valeurs fourni :
 
@@ -105,6 +107,7 @@ TEST SUITE: None
 NOTES:
 ...
 ```
+
 </details><br>
 
 L'option `--wait` attend que tous les pods soient prêts avant de rendre la main. Cette etape peut prendre 1 a 2 minutes.
@@ -126,6 +129,7 @@ argocd-redis-xxxxxxxxxx-xxxxx                      1/1     Running   0          
 argocd-repo-server-xxxxxxxxxx-xxxxx                1/1     Running   0          60s
 argocd-server-xxxxxxxxxx-xxxxx                     1/1     Running   0          60s
 ```
+
 </details><br>
 
 Tous les pods doivent être en statut `Running` avec `1/1` Ready.
@@ -145,9 +149,12 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 ```
 <mot-de-passe-aleatoire>
 ```
+
 </details><br>
 
 Notez ce mot de passe, vous en aurez besoin pour vous connecter à l'interface ArgoCD.
+
+XG5YWA7XLB940zBC%
 
 ### 5. Accéder à l'interface ArgoCD
 
@@ -164,6 +171,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:80
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
 ```
+
 </details><br>
 
 Ouvrez votre navigateur a l'adresse [http://localhost:8080](http://localhost:8080).
@@ -205,6 +213,7 @@ Avant de passer à l'exercice suivant, assurez-vous que tous les points ci-desso
   applicationsets.argoproj.io                 ...
   appprojects.argoproj.io                     ...
   ```
+
   </details><br>
 
   Ce sont les **Custom Resource Definitions** ajoutees par ArgoCD. Nous les utiliserons dans les exercices suivants.
@@ -222,6 +231,7 @@ Avant de passer à l'exercice suivant, assurez-vous que tous les points ci-desso
   NAME      AGE
   default   ...
   ```
+
   </details><br>
 
   Le projet `default` est créé automatiquement à l'installation. Toutes nos Applications utiliseront ce projet.
