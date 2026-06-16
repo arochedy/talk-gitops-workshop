@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------
+# ArgoCD Application: app-blue
+# ---------------------------------------------------------------
+# An Application is a Custom Resource (CRD) that tells ArgoCD
+# to watch a Git repository and synchronise the Kubernetes
+# manifests it contains into the target cluster and namespace.
+#
+# This is the declarative approach: instead of running
+# "kubectl apply" manually, we describe WHAT we want deployed
+# and ArgoCD takes care of the HOW.
+# ---------------------------------------------------------------
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # Name displayed in the ArgoCD UI and CLI
+  name: app-blue
+  # ArgoCD Applications MUST live in the argocd namespace
+  namespace: argocd
+spec:
+  # The ArgoCD project -- "default" is the built-in project
+  project: default
+
+  # ---- Source: where to find the manifests ----------------------
+  source:
+    # Public Git repository URL
+    repoURL: https://github.com/arochedy/talk-gitops-workshop.git
+    # Git branch to track
+    targetRevision: main
+    # Path within the repo containing the K8s manifests
+    path: exercises/01-argocd-basics/manifests
+
+  # ---- Destination: where to deploy -----------------------------
+  destination:
+    # The cluster ArgoCD is installed on (in-cluster shorthand)
+    server: https://kubernetes.default.svc
+    # Target namespace for the deployed resources
+    namespace: workshop
+
+  # ---- Sync policy: manual by default ---------------------------
+  # We start with manual sync so participants can observe each step.
+  # During the exercise, we will enable automated sync.
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
