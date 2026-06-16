@@ -31,7 +31,7 @@ spec:
               name: http
           env:
             - name: PODINFO_UI_COLOR
-              value: "#FF0000"
+              value: "#FF00FF"
             - name: PODINFO_UI_MESSAGE
               value: "Deployed with ArgoCD!"
           livenessProbe:
