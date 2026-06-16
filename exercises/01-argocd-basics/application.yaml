@@ -23,7 +23,7 @@ spec:
   # ---- Source: where to find the manifests ----------------------
   source:
     # Public Git repository URL
-    repoURL: https://github.com/stafyniaksacha/talk-gitops-workshop.git
+    repoURL: https://github.com/arochedy/talk-gitops-workshop.git
     # Git branch to track
     targetRevision: main
     # Path within the repo containing the K8s manifests
@@ -39,4 +39,7 @@ spec:
   # ---- Sync policy: manual by default ---------------------------
   # We start with manual sync so participants can observe each step.
   # During the exercise, we will enable automated sync.
-  syncPolicy: {}
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
