@@ -33,7 +33,7 @@ spec:
             - name: PODINFO_UI_COLOR
               value: "#FF00FF"
             - name: PODINFO_UI_MESSAGE
-              value: "Deployed with ArgoCD!"
+              value: "ZEUBI!"
           livenessProbe:
             httpGet:
               path: /healthz
